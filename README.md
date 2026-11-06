@@ -26,7 +26,8 @@ Ett ställe utan `lat`/`lng` visas i listan men inte på kartan.
 
 | Variabel | Vad den gör |
 |---|---|
-| `SITE_PASSWORD` | Lösenordsskyddar hela sidan (Basic Auth i `middleware.js`) så länge `SITE_PUBLIC` inte är `true`. Användarnamnet spelar ingen roll. |
+| `SITE_LOCK` | Sätt till `true` för att slå på lösenordsskyddet (Basic Auth i `middleware.js`). Av som standard, så att länken kan visas utan lösenord. Sidan har ändå noindex tills `SITE_PUBLIC` är `true`. |
+| `SITE_PASSWORD` | Lösenordet som gäller när `SITE_LOCK=true`. Användarnamnet spelar ingen roll. |
 | `SITE_PUBLIC` | Sätt till `true` vid lansering. Det tar bort lösenordet, noindex och konceptraden, och ger canonical och sitemap. |
 | `SITE_URL` | Till exempel `https://mariaplan.nu`. Används för canonical, robots och sitemap. |
 

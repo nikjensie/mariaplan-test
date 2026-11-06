@@ -1,9 +1,9 @@
 // Vercel Routing Middleware: lösenordsskydd så länge sidan är ett konceptförslag.
-// Sätt SITE_PASSWORD för att slå på skyddet. SITE_PUBLIC=true släpper det.
+// Av som standard. Sätt SITE_LOCK=true och SITE_PASSWORD för att slå på skyddet.
 export const config = { matcher: '/((?!favicon.svg).*)' };
 
 export default function middleware(request) {
-  if (process.env.SITE_PUBLIC === 'true') return;
+  if (process.env.SITE_PUBLIC === 'true' || process.env.SITE_LOCK !== 'true') return;
   const password = process.env.SITE_PASSWORD;
   if (!password) return;
   const auth = request.headers.get('authorization') || '';
