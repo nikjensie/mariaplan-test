@@ -1,0 +1,238 @@
+---
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource-variable/hanken-grotesk';
+import 'leaflet/dist/leaflet.css';
+import '../styles/site.css';
+import Facade from '../components/Facade.astro';
+import places from '../data/places.json';
+import stops from '../data/stops.json';
+import history from '../data/history.json';
+import { CATS } from '../lib/cats.js';
+
+const isPublic = import.meta.env.SITE_PUBLIC === 'true' || process.env.SITE_PUBLIC === 'true';
+const siteUrl = (process.env.SITE_URL || 'https://mariaplan.nu').replace(/\/$/, '');
+
+const counts = Object.fromEntries(CATS.map((c) => [c.id, places.filter((p) => p.cat === c.id).length]));
+const sorted = [...places].sort((a, b) => a.name.localeCompare(b.name, 'sv'));
+const streetOf = (a) => (a || '').replace(/\s*\d.*$/, '').trim();
+const streets = [...new Set(places.map((p) => streetOf(p.address)).filter(Boolean))]
+  .map((s) => ({ s, n: places.filter((p) => streetOf(p.address) === s).length }))
+  .filter((x) => x.n >= 3)
+  .sort((a, b) => b.n - a.n);
+
+const shops = [...history.shops].sort((a, b) => a.from - b.from || a.to - b.to);
+const Y0 = 1940, Y1 = 2026;
+const pct = (y) => ((y - Y0) / (Y1 - Y0)) * 100;
+const lines = [...new Set(stops.flatMap((s) => s.lines))].sort((a, b) => a - b);
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Upptäck Mariaplan',
+  url: siteUrl,
+  inLanguage: 'sv-SE',
+  about: { '@type': 'Place', name: 'Mariaplan, Kungsladugård och Sandarna', address: { '@type': 'PostalAddress', addressLocality: 'Göteborg', addressCountry: 'SE' } },
+};
+---
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#e9ece0" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#18221f" media="(prefers-color-scheme: dark)" />
+  <title>Upptäck Mariaplan, Kungsladugård och Sandarna</title>
+  <meta name="description" content="Kvartersguiden till Mariaplan, Kungsladugård och Sandarna i Göteborg: kaféer, krogar, småbutiker, hållplatser och historien om ställena som funnits här." />
+  {isPublic ? <link rel="canonical" href={siteUrl + '/'} /> : <meta name="robots" content="noindex, nofollow" />}
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+</head>
+<body>
+  <a class="skip" href="#hitta">Hoppa till guiden</a>
+
+  <header class="masthead">
+    <div class="wrap bar">
+      <a class="wordmark" href="/">
+        <svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="10" width="26" height="19" fill="var(--ochre)"/><rect x="3" y="21" width="26" height="8" fill="var(--brick)"/><path d="M1 11 16 3l15 8" fill="none" stroke="currentColor" stroke-width="2.4"/><rect x="8" y="13" width="5" height="6" fill="var(--paper)"/><rect x="19" y="13" width="5" height="6" fill="var(--paper)"/><rect x="14" y="23" width="4" height="6" fill="var(--paper)"/></svg>
+        <span>Mariaplan</span>
+      </a>
+      <nav aria-label="Huvudmeny">
+        <a href="#hitta">Hitta</a>
+        <a href="#sparvagn">Spårvagn</a>
+        <a href="#nu-och-da">Nu &amp; då</a>
+        <a href="#om">Om guiden</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero-text">
+        <h1>En stad i staden</h1>
+        <p class="lede">Runt torget där Slottsskogsgatan, Kungsladugårdsgatan och Mariagatan möts finns bageriet, skivbutiken, skomakaren och spårvagnen in till stan. Här är kvarteren i Kungsladugård och Sandarna samlade, från kafé till vårdcentral.</p>
+        <form class="hero-search" role="search" action="#hitta" data-hero-search>
+          <label for="q-hero" class="visually-hidden">Sök i guiden</label>
+          <input id="q-hero" type="search" name="q" autocomplete="off" placeholder="Sök på ställe, gata eller sort" data-ph-long="Sök på ställe, gata eller sort, t.ex. pizza" data-ph-short="Sök i guiden" />
+          <button type="submit">Sök</button>
+        </form>
+        <p class="quick">
+          Prova:
+          <button type="button" data-quick="Kafé">fika</button>
+          <button type="button" data-quick="Second hand">second hand</button>
+          <button type="button" data-quick="Pizzeria">pizza</button>
+          <button type="button" data-quick="Keramik">keramik</button>
+          <button type="button" data-quick="Skivor">skivor</button>
+        </p>
+      </div>
+      <Facade />
+    </section>
+
+    <section id="hitta" class="finder" aria-labelledby="hitta-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="hitta-h">Hitta i kvarteren</h2>
+          <p>{places.length} ställen, från Jaegerdorffsplatsen ner till Sandarna.</p>
+        </div>
+
+        <div class="tools" data-tools>
+          <div class="search">
+            <label for="q" class="visually-hidden">Sök</label>
+            <input id="q" type="search" autocomplete="off" placeholder="Sök på namn, gata eller sort" data-ph-long="Sök på namn, gata eller sort" data-ph-short="Sök" />
+          </div>
+          <div class="chips" role="group" aria-label="Kategori">
+            <button type="button" class="chip" aria-pressed="true" data-cat="">Allt <span>{places.length}</span></button>
+            {CATS.map((c) => (
+              <button type="button" class="chip" aria-pressed="false" data-cat={c.id} style={`--c: var(--cat-${c.id})`}>
+                <i aria-hidden="true"></i>{c.label} <span>{counts[c.id]}</span>
+              </button>
+            ))}
+          </div>
+          <div class="streets">
+            <label for="street">Gata</label>
+            <select id="street">
+              <option value="">Alla gator</option>
+              {streets.map((x) => <option value={x.s}>{x.s} ({x.n})</option>)}
+            </select>
+          </div>
+          <div class="view-toggle" role="group" aria-label="Visa som">
+            <button type="button" aria-pressed="true" data-view="list">Lista</button>
+            <button type="button" aria-pressed="false" data-view="map">Karta</button>
+          </div>
+        </div>
+
+        <div class="split" data-split data-view="list">
+          <div class="register">
+            <p class="result-count" aria-live="polite" data-count>Visar alla {places.length}</p>
+            <ol class="rows" data-rows>
+              {sorted.map((p) => (
+                <li class="row" data-id={p.id} data-cat={p.cat} data-street={streetOf(p.address)}
+                    data-text={`${p.name} ${p.type} ${p.address}`.toLowerCase()} style={`--c: var(--cat-${p.cat})`}>
+                  <i class="dot" aria-hidden="true"></i>
+                  <div class="row-main">
+                    <h3>{p.name}</h3>
+                    <p class="row-type">{p.type}</p>
+                  </div>
+                  <p class="row-addr">{p.address || ' '}</p>
+                  <div class="row-actions">
+                    {p.lat && <button type="button" data-show={p.id} aria-label={`Visa ${p.name} på kartan`}>Karta</button>}
+                    {p.url && <a href={p.url} rel="noopener" target="_blank" aria-label={`Webbplats för ${p.name}`}>Webb</a>}
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <p class="empty" data-empty hidden>Inget ställe matchar. Prova ett kortare ord, eller välj <button type="button" data-reset>Allt</button>.</p>
+          </div>
+          <div class="map-wrap">
+            <div id="map" class="map" role="region" aria-label="Karta över kvarteren"></div>
+            <button type="button" class="near" data-near>Visa det som ligger nära mig</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sparvagn" class="tram-sec" aria-labelledby="tram-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="tram-h">Med spårvagn</h2>
+          <p>Linje {lines.join(', ').replace(/, (?=[^,]*$)/, ' och ')} går genom kvarteren. Här stannar de.</p>
+        </div>
+        <ul class="stops">
+          {stops.map((s) => (
+            <li>
+              <button type="button" data-stop={s.id}>
+                <span class="stop-name">{s.name}</span>
+                <span class="badges">{s.lines.map((l) => <b class={`line l${l}`}>{l}</b>)}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section id="nu-och-da" class="history" aria-labelledby="hist-h">
+      <div class="wrap">
+        <div class="section-head">
+          <h2 id="hist-h">Nu &amp; då</h2>
+          <p>Butiker kommer och går, men husen står kvar. Ett urval av ställen som funnits i kvarteren, och hur länge de höll öppet.</p>
+        </div>
+
+        <div class="lifelines" role="list">
+          <div class="axis" aria-hidden="true">
+            {[1940, 1960, 1980, 2000, 2020].map((y) => <span style={`left:${pct(y)}%`}>{y}</span>)}
+          </div>
+          {shops.map((s) => (
+            <div class="life" role="listitem">
+              <div class="life-label">
+                <strong>{s.name}</strong>
+                <span>{s.type}, {s.address}</span>
+              </div>
+              <div class="life-track">
+                <span class="life-bar" style={`left:${pct(s.from)}%; width:${Math.max(pct(s.to) - pct(s.from), 1.2)}%`}></span>
+                <span class={pct(s.from) > 78 ? 'life-years end' : 'life-years'} style={`left:${pct(s.from) > 78 ? pct(s.to) : pct(s.from)}%`}>{s.from === s.to ? s.from : `${s.from}–${s.to}`}</span>
+              </div>
+              {s.note && <p class="life-note">{s.note}</p>}
+            </div>
+          ))}
+        </div>
+
+        <h3 class="houses-h">När husen byggdes</h3>
+        <ol class="houses">
+          {history.houses.map((h) => (
+            <li><span class="year">{h.year}</span><div><strong>{h.title}</strong><p>{h.text}</p></div></li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section id="om" class="about" aria-labelledby="om-h">
+      <div class="wrap about-grid">
+        <div>
+          <h2 id="om-h">Om guiden</h2>
+          <p>Mariaplan, Kungsladugård och Sandarna byggdes ut från tidigt 1900-tal, med landshövdingehus och senare funkishus från 1910- till 50-talet. Mellan husen finns ett ovanligt tätt utbud av kaféer, krogar och småbutiker, och många har funnits här i decennier.</p>
+          <p>Guiden finansieras inte av någon enskild verksamhet. Den finns för att det ska bli lättare att hitta, och handla, lokalt.</p>
+        </div>
+        <aside class="owner">
+          <h3>Driver du en verksamhet här?</h3>
+          <p>Saknas ditt ställe, eller har du flyttat, bytt öppettider eller fått nya bilder? Hör av dig så uppdaterar vi.</p>
+          <a class="btn" href="https://mariaplan.nu/kontakt/">Skicka uppgifter</a>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap foot-grid">
+      <p>Upptäck Mariaplan, en kvartersguide för Kungsladugård och Sandarna i Göteborg.</p>
+      <p>Kartdata © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, kartstil © <a href="https://carto.com/attributions">CARTO</a></p>
+      {!isPublic && <p class="concept">Konceptförslag för en ny webbplats. Inte publicerad.</p>}
+    </div>
+  </footer>
+
+  <script type="application/json" id="data" set:html={JSON.stringify({ places, stops, cats: CATS })} />
+  <script>
+    import '../scripts/guide.js';
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "astro",
+  "redirects": [
+    { "source": "/karta", "destination": "/#hitta", "permanent": true },
+    { "source": "/karta/", "destination": "/#hitta", "permanent": true },
+    { "source": "/och-da/:path*", "destination": "/#nu-och-da", "permanent": true },
+    { "source": "/tidslinje/:path*", "destination": "/#nu-och-da", "permanent": true },
+    { "source": "/om/:path*", "destination": "/#om", "permanent": true },
+    { "source": "/kategori/:slug*", "destination": "/#hitta", "permanent": true },
+    { "source": "/hallplatser/:path*", "destination": "/#sparvagn", "permanent": true }
+  ]
+}

@@ -1,0 +1,76 @@
+---
+// Husrad i landshövdingehusstil: stenvåning i tegel, två våningar trä ovanpå.
+// Ritas av en enkel uppställning så att raden blir jämn och lätt att ändra.
+const W = 1440, STREET = 238, BASE = 62, FLOOR = 54, ROOF = 16;
+const houses = [
+  { w: 150, wood: 'var(--f-sage)',  shop: null },
+  { w: 190, wood: 'var(--f-ochre)', shop: 'var(--f-brick-light)', sign: 'Kafé' },
+  { w: 165, wood: 'var(--f-pale)',  shop: null },
+  { w: 210, wood: 'var(--f-red)',   shop: 'var(--f-sage-dark)', sign: 'Skivor' },
+  { w: 160, wood: 'var(--f-ochre)', shop: null },
+  { w: 185, wood: 'var(--f-sage)',  shop: 'var(--f-ochre-dark)', sign: 'Bageri' },
+  { w: 175, wood: 'var(--f-pale)',  shop: 'var(--f-red)', sign: 'Blommor' },
+  { w: 205, wood: 'var(--f-red)',   shop: null },
+];
+let x = 0;
+const laid = houses.map((h, i) => { const r = { ...h, x, i }; x += h.w; return r; });
+const top = STREET - BASE - 2 * FLOOR - ROOF;
+function windows(h, y) {
+  const n = Math.max(2, Math.floor(h.w / 46));
+  const gap = h.w / n;
+  return Array.from({ length: n }, (_, k) => ({ x: h.x + gap * k + gap / 2 - 10, y: y + 12 }));
+}
+---
+<svg class="facade" viewBox={`0 0 ${W} 260`} preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+  <g class="houses">
+    {laid.map((h) => (
+      <g>
+        <rect x={h.x} y={top} width={h.w} height={ROOF} fill="var(--f-roof)" />
+        <rect x={h.x} y={top + ROOF} width={h.w} height={2 * FLOOR} fill={h.wood} />
+        {Array.from({ length: Math.floor(h.w / 9) }, (_, k) => (
+          <line x1={h.x + k * 9 + 4} x2={h.x + k * 9 + 4} y1={top + ROOF} y2={STREET - BASE} class="panel" />
+        ))}
+        <line x1={h.x} x2={h.x + h.w} y1={top + ROOF + FLOOR} y2={top + ROOF + FLOOR} class="belt" />
+        {[top + ROOF, top + ROOF + FLOOR].flatMap((fy) => windows(h, fy)).map((w) => (
+          <g>
+            <rect x={w.x - 3} y={w.y - 3} width="26" height="36" fill="var(--f-trim)" />
+            <rect x={w.x} y={w.y} width="20" height="30" fill="var(--f-glass)" />
+            <line x1={w.x + 10} x2={w.x + 10} y1={w.y} y2={w.y + 30} class="mullion" />
+            <line x1={w.x} x2={w.x + 20} y1={w.y + 12} y2={w.y + 12} class="mullion" />
+          </g>
+        ))}
+        <rect x={h.x} y={STREET - BASE} width={h.w} height={BASE} fill="var(--f-brick)" />
+        {Array.from({ length: 6 }, (_, r) => (
+          <line x1={h.x} x2={h.x + h.w} y1={STREET - BASE + 10 + r * 9} y2={STREET - BASE + 10 + r * 9} class="mortar" />
+        ))}
+        <rect x={h.x + h.w / 2 - 13} y={STREET - 44} width="26" height="44" fill="var(--f-door)" rx="1" />
+        {h.shop && (
+          <g>
+            <rect x={h.x + 14} y={STREET - 46} width={h.w / 2 - 34} height="34" fill="var(--f-glass)" />
+            <path d={`M${h.x + 8} ${STREET - 50} h${h.w / 2 - 22} l-6 12 h${-(h.w / 2 - 34)} z`} fill={h.shop} />
+            <text x={h.x + 14} y={STREET - 54} class="sign">{h.sign}</text>
+          </g>
+        )}
+        {!h.shop && <rect x={h.x + 18} y={STREET - 42} width="22" height="24" fill="var(--f-glass)" />}
+        <line x1={h.x} x2={h.x} y1={top} y2={STREET} class="seam" />
+      </g>
+    ))}
+  </g>
+  <g class="tram">
+    <rect x="0" y={STREET - 50} width="330" height="44" rx="10" fill="var(--f-tram)" />
+    <rect x="0" y={STREET - 22} width="330" height="6" fill="var(--f-trim)" />
+    {Array.from({ length: 7 }, (_, k) => (
+      <rect x={22 + k * 42} y={STREET - 44} width="30" height="18" rx="2" fill="var(--f-glass)" />
+    ))}
+    <rect x="306" y={STREET - 44} width="16" height="18" rx="2" fill="var(--f-glass)" />
+    <text x="312" y={STREET - 31} class="tram-nr">3</text>
+    <circle cx="60" cy={STREET - 4} r="6" fill="var(--f-roof)" />
+    <circle cx="90" cy={STREET - 4} r="6" fill="var(--f-roof)" />
+    <circle cx="240" cy={STREET - 4} r="6" fill="var(--f-roof)" />
+    <circle cx="270" cy={STREET - 4} r="6" fill="var(--f-roof)" />
+    <line x1="165" x2="185" y1={STREET - 50} y2={STREET - 72} class="pole" />
+  </g>
+  <line x1="0" x2={W} y1={STREET - 72} y2={STREET - 72} class="wire" />
+  <rect x="0" y={STREET + 2} width={W} height="22" fill="var(--f-street)" />
+  <line x1="0" x2={W} y1={STREET + 2} y2={STREET + 2} class="rail" />
+</svg>

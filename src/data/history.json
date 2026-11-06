@@ -1,0 +1,37 @@
+{
+  "shops": [
+    { "name": "Pias sybutik", "type": "Garn, sybehör och handarbete", "address": "Slottsskogsgatan 42", "from": 1974, "to": 2021 },
+    { "name": "Inges Radio o TV-service", "type": "Radio- och tv-service", "address": "Älvsborgsgatan 33", "from": 1978, "to": 2016 },
+    { "name": "Butik Lisa & Johan", "type": "Kläder och presenter", "address": "Mariaplan 1", "from": 1980, "to": 2015 },
+    { "name": "Mölnlycke sytråd", "type": "Sytrådsfabrik", "address": "Karl Johansgatan 152", "from": 1947, "to": 1993, "note": "Tillverkningen av sytråd pågick i flera decennier innan fabriken stängde 1993." },
+    { "name": "Café Godhem", "type": "Kafé", "address": "Silverkällegatan 4", "from": 1991, "to": 2004 },
+    { "name": "Marias video", "type": "Videobutik", "address": "Älvsborgsgatan 39", "from": 1996, "to": 2011 },
+    { "name": "Loppans Tips och Tobak", "type": "Tobak", "address": "Mariaplan 3", "from": 1996, "to": 2009 },
+    { "name": "Din Livs", "type": "Närlivs", "address": "Slottsskogsgatan 19", "from": 1996, "to": 1998 },
+    { "name": "Slottsramen", "type": "Ramverkstad", "address": "Slottsskogsgatan 27", "from": 1997, "to": 2015 },
+    { "name": "Feskeboa", "type": "Fisk", "address": "Kustroddaregatan 46", "from": 2000, "to": 2001 },
+    { "name": "Mariaplans Florister", "type": "Blommor", "address": "Mariaplan 2", "from": 2001, "to": 2021 },
+    { "name": "Kafé Kardemumma", "type": "Kafé", "address": "Mariagatan 16", "from": 2002, "to": 2012 },
+    { "name": "Bullit custom leather", "type": "Läderhantverk", "address": "Älvsborgsgatan 44", "from": 2002, "to": 2019 },
+    { "name": "Grönsakslandet Majorna", "type": "Grönsaker", "address": "Älvsborgsgatan 31", "from": 2003, "to": 2019 },
+    { "name": "Köttboden", "type": "Chark", "address": "Slottsskogsgatan 42B", "from": 2006, "to": 2009 },
+    { "name": "Bolla", "type": "Kläder", "address": "Älvsborgsgatan 30", "from": 2009, "to": 2014, "note": "Kläder i naturmaterial och klara färger till rimliga priser." },
+    { "name": "Titta", "type": "Barnkläder och leksaker", "address": "Älvsborgsgatan 44", "from": 2009, "to": 2013 },
+    { "name": "Templets loppis", "type": "Second hand, Frälsningsarmén", "address": "Kustroddaregatan 1", "from": 2009, "to": 2017 },
+    { "name": "Grillhouse", "type": "Hamburgare och sallad", "address": "Slottsskogsgatan 1", "from": 2009, "to": 2014 },
+    { "name": "Majken Livs", "type": "Närlivs", "address": "Slottsskogsgatan 19", "from": 2012, "to": 2014 },
+    { "name": "Syster Marmelad", "type": "Vegetariskt", "address": "Mariagatan 16", "from": 2014, "to": 2023 },
+    { "name": "Bombay", "type": "Indiskt", "address": "Slottsskogsgatan 1", "from": 2014, "to": 2017 },
+    { "name": "Studio 42", "type": "Galleri och ramverkstad", "address": "Slottsskogsgatan 27", "from": 2015, "to": 2023 },
+    { "name": "Fixoteket Majorna", "type": "Laga, låna, byta", "address": "Slottsskogsgatan 1", "from": 2019, "to": 2024, "note": "Ett ställe i kvarteret där man kunde laga, låna, byta och bygga." },
+    { "name": "Picknick i Majorna", "type": "Grönsaker", "address": "Älvsborgsgatan 31", "from": 2019, "to": 2024 },
+    { "name": "Elins återbruk", "type": "Second hand och återbruk", "address": "Älvsborgsgatan 26", "from": 2025, "to": 2026 }
+  ],
+  "houses": [
+    { "year": 1918, "title": "Mariaplan", "text": "Torget där Slottsskogsgatan, Kungsladugårdsgatan och Mariagatan möts." },
+    { "year": 1923, "title": "Kjellestadsgatan och Kennedygatan", "text": "Kvarteren ner mot Mariagatan." },
+    { "year": 1931, "title": "Stjernsköldsgatan", "text": "Nummer 4–8 stod klara 1931, hörnhuset på nummer 2 tre år senare." },
+    { "year": 1936, "title": "Slottsskogsgatan 48–54", "text": "Husen vid Slottsskogsgatans övre del." },
+    { "year": 1944, "title": "Fotögatan och Varholmsgatan", "text": "Bostäderna mot Sandarna och älven." }
+  ]
+}

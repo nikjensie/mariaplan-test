@@ -1,0 +1,11 @@
+[
+  {"id": "mariaplan", "name": "Mariaplan", "lines": ["3", "11"], "lat": 57.686702, "lng": 11.920672},
+  {"id": "jaegerdorffsplatsen", "name": "Jaegerdorffsplatsen", "lines": ["3", "9"], "lat": 57.691435, "lng": 11.915072},
+  {"id": "godhemsgatan", "name": "Godhemsgatan", "lines": ["3"], "lat": 57.684775, "lng": 11.925706},
+  {"id": "godhemsgatan-2", "name": "Godhemsgatan", "lines": ["11"], "lat": 57.685431, "lng": 11.92637},
+  {"id": "ekedal", "name": "Ekedal", "lines": ["11"], "lat": 57.686754, "lng": 11.927895},
+  {"id": "sannaplan", "name": "Sannaplan", "lines": ["9", "11"], "lat": 57.684325, "lng": 11.91674},
+  {"id": "sandarna", "name": "Sandarna", "lines": ["9", "11"], "lat": 57.682858, "lng": 11.910174},
+  {"id": "vagnhallen-majorna", "name": "Vagnhallen Majorna", "lines": ["3", "9", "11"], "lat": 57.689098, "lng": 11.912467},
+  {"id": "ostindiegatan", "name": "Ostindiegatan", "lines": ["3", "9", "11"], "lat": 57.687814, "lng": 11.915185}
+]
